@@ -8,13 +8,31 @@ document.addEventListener("DOMContentLoaded", async() => {
         const indicator = document.querySelector(".indicator");
         const timeDiv = document.getElementById("time-value");
         let timeInterval;
+        let resizeTimeout;
 
         // Position the indicator under the active navigation link
         const moveIndicator = (el) => {
+            if (!el) return;
+
+            const { left, width } = el.getBoundingClientRect();
+            const { left: navLeft } = document.querySelector(".header__wrapper").getBoundingClientRect();
+            indicator.style.transition = "all 0.3s ease";
+            indicator.style.left = `${left - navLeft}px`;
+            indicator.style.width = `${width}px`;
+        };
+
+        // Immediately update indicator position without animation
+        const updateIndicatorImmediately = (el) => {
+            if (!el) return;
+
+            indicator.style.transition = "none";
             const { left, width } = el.getBoundingClientRect();
             const { left: navLeft } = document.querySelector(".header__wrapper").getBoundingClientRect();
             indicator.style.left = `${left - navLeft}px`;
             indicator.style.width = `${width}px`;
+
+            // Force a reflow to apply the styles immediately
+            indicator.offsetHeight;
         };
 
         // Function to check if timezone is valid
@@ -89,18 +107,26 @@ document.addEventListener("DOMContentLoaded", async() => {
             // Set first city as active by default
             if (i === 0) {
                 a.classList.add("active");
-                setTimeout(() => moveIndicator(a), 0);
+                // Use a small delay to ensure elements are properly rendered
+                setTimeout(() => updateIndicatorImmediately(a), 10);
                 updateTime(city.timezone || "UTC");
             }
         });
 
-        // Use requestAnimationFrame for smooth indicator positioning
-        // This helps with Safari's rendering and animation issues
+        // Handle resize events with debouncing and immediate updates
         window.addEventListener("resize", () => {
-            requestAnimationFrame(() => {
-                const active = document.querySelector(".nav-link.active");
-                if (active) moveIndicator(active);
-            });
+            const active = document.querySelector(".nav-link.active");
+            if (!active) return;
+
+            // Immediately update without animation during resize
+            updateIndicatorImmediately(active);
+
+            // Debounce the final animation
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Restore animation and make final adjustment when resize stops
+                moveIndicator(active);
+            }, 100);
         });
     } catch (error) {
         console.error("Error loading navigation data:", error);
