@@ -1,0 +1,53 @@
+
+body
+    font-family: Arial, sans-serif
+    margin: 0
+    padding: 0
+
+.container
+    max-width: 1200px
+    margin: 0 auto
+    padding: 0 20px
+
+.header
+    background-color: #fff
+    padding: 10px 0
+
+    &__wrapper
+        position: relative
+        display: flex
+        align-items: center
+        border-bottom: 1px solid #ccc
+    &__nav
+        display: flex
+        flex-grow: 1
+        justify-content: center
+
+        & .nav-link
+            padding: 10px 20px
+            text-decoration: none
+            color: #555
+            cursor: pointer
+            transition: color 0.3s ease
+            position: relative
+            &:hover
+                color: #0999ec
+        & .nav-link.active
+            color: #000
+
+.indicator
+    position: absolute
+    bottom: -1px
+    height: 1px
+
+    background-color: #000
+    transition: all 0.3s ease
+    z-index: 1
+
+.main
+    padding: 20px
+    text-align: center
+    font-size: 1.2em
+
+.time
+    margin-top: 20px
