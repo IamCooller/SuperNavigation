@@ -19,11 +19,18 @@ body {
   display: flex;
   align-items: center;
   border-bottom: 1px solid #ccc;
+  padding: 0 20px;
 }
 .header__nav {
   display: flex;
   flex-grow: 1;
   justify-content: center;
+  overflow-x: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.header__nav::-webkit-scrollbar {
+  display: none;
 }
 .header__nav .nav-link {
   padding: 10px 20px;
@@ -32,6 +39,7 @@ body {
   cursor: pointer;
   transition: color 0.3s ease;
   position: relative;
+  white-space: nowrap;
 }
 .header__nav .nav-link:hover {
   color: #0999ec;
