@@ -88,6 +88,11 @@ document.addEventListener("DOMContentLoaded", async() => {
             document.querySelectorAll(".nav-link").forEach((a) => a.classList.remove("active"));
             link.classList.add("active");
             moveIndicator(link);
+
+            // Update tabpanel connection
+            const timePanel = document.getElementById("time-panel");
+            timePanel.setAttribute("aria-labelledby", link.id);
+
             updateTime(city.timezone || "UTC");
         };
 
@@ -99,8 +104,22 @@ document.addEventListener("DOMContentLoaded", async() => {
             a.dataset.section = city.section;
             a.dataset.timezone = city.timezone;
             a.textContent = city.label;
+
+            // Add accessibility attributes
+            a.setAttribute("role", "tab");
+            a.setAttribute("aria-selected", i === 0 ? "true" : "false");
+            a.setAttribute("aria-controls", `time-${city.section}`);
+            a.id = `tab-${city.section}`;
+
             a.addEventListener("click", (e) => {
                 e.preventDefault();
+
+                // Update ARIA states
+                document.querySelectorAll(".nav-link").forEach((navLink) => {
+                    navLink.setAttribute("aria-selected", "false");
+                });
+                a.setAttribute("aria-selected", "true");
+
                 setActiveCity(city, a);
             });
             headerNav.appendChild(a);
@@ -109,6 +128,11 @@ document.addEventListener("DOMContentLoaded", async() => {
                 a.classList.add("active");
                 // Use a small delay to ensure elements are properly rendered
                 setTimeout(() => updateIndicatorImmediately(a), 10);
+
+                // Set initial tabpanel connection
+                const timePanel = document.getElementById("time-panel");
+                timePanel.setAttribute("aria-labelledby", a.id);
+
                 updateTime(city.timezone || "UTC");
             }
         });

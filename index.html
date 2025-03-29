@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>City Navigation</title>
+    <meta name="description" content="Global city navigation with real-time local time display" />
     <link rel="stylesheet" href="./assets/styles/main.css" />
 </head>
 
@@ -12,14 +13,14 @@
     <header class="header">
         <div class="container">
             <div class="header__wrapper">
-                <nav class="header__nav" id="header-nav"></nav>
-                <div class="indicator"></div>
+                <nav class="header__nav" id="header-nav" role="tablist" aria-label="City navigation"></nav>
+                <div class="indicator" aria-hidden="true"></div>
             </div>
         </div>
     </header>
 
     <main class="main">
-        <div class="time">
+        <div class="time" role="tabpanel" id="time-panel" aria-live="polite">
             <span>Current Time:</span>
             <span id="time-value"></span>
         </div>
